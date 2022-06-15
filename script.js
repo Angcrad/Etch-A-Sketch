@@ -5,6 +5,15 @@ let target;
 let sliderValTxt=document.querySelector("#sliderValue");
 let slider = document.getElementById("sizeSlider");
 let gridVar=document.getElementById("grid");
+let mouseDown = false;
+document.body.onmousedown = function()
+								{
+									mouseDown = true;
+								};
+document.body.onmouseup = function()
+								{
+									mouseDown = false;
+								};
 generateGrid(gridX,gridY);
 let resBtn = document.querySelector(".reset");
 slider.addEventListener("mousemove", updateSlider, false);
@@ -14,17 +23,13 @@ resBtn.addEventListener("click",function()
 									},false);
 
 
-
-function hover()
+function changeColor(e)
 {
-	for(let i=0;i<target.length;i++)
-	{
-		target[i].onmouseover=function()
-								{
-									target[i].classList.remove("unselected");
-									target[i].classList.add("selected");
-								};
-	}
+	if (e.type === 'mouseover' && !mouseDown) return
+	
+	e.target.classList.remove("unselected");
+	e.target.classList.add("selected");
+	
 }
 function generateGrid(gridX,gridY)
 {
@@ -36,15 +41,13 @@ function generateGrid(gridX,gridY)
 	{	
 		htmlStr+="<div class=\"unselected pixel\"></div>\n";
 	}
-	
-	/*document.getElementById("grid").innerHTML=htmlStr;
-	document.getElementById("grid").style="grid-template-columns: repeat("+gridX+", 1fr); grid-template-rows: repeat("+gridY+", 1fr);";*/
 	gridVar.innerHTML=htmlStr;
 	gridVar.style="grid-template-columns: repeat("+gridX+", 1fr); grid-template-rows: repeat("+gridY+", 1fr);";
 	target = document.querySelectorAll(".pixel");
 	for(let i=0;i<target.length;i++)
 	{
-		target[i].addEventListener("mouseover", hover, false);
+		target[i].addEventListener("mousedown", changeColor, false);
+		target[i].addEventListener("mouseover", changeColor, false);
 	}
 }
 function updateSlider()
