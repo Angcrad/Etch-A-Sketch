@@ -6,13 +6,17 @@ let sliderValTxt=document.querySelector("#sliderValue");
 let slider = document.getElementById("sizeSlider");
 let gridVar=document.getElementById("grid");
 let mouseDown = false;
-document.body.onmousedown = function()
+let mouseButtonVal=0;
+document.body.onmousedown = function(e)
 								{
 									mouseDown = true;
+									mouseButtonVal=e.button+1;
+									changeColor(e);
 								};
-document.body.onmouseup = function()
+document.body.onmouseup = function(e)
 								{
 									mouseDown = false;
+									mouseButtonVal=0;
 								};
 generateGrid(gridX,gridY);
 let resBtn = document.querySelector(".reset");
@@ -25,10 +29,22 @@ resBtn.addEventListener("click",function()
 
 function changeColor(e)
 {
-	if (e.type === 'mouseover' && !mouseDown) return
+	if (e.type === 'mouseover' && !mouseDown)
+	{
+		return;
+	}
+	switch(mouseButtonVal)
+	{
+		case 1:
+			e.target.classList.remove("unselected");
+			e.target.classList.add("selected");
+			break;
+		case 3:
+			e.target.classList.add("unselected");
+			e.target.classList.remove("selected");
+			break;
+	}
 	
-	e.target.classList.remove("unselected");
-	e.target.classList.add("selected");
 	
 }
 function generateGrid(gridX,gridY)
